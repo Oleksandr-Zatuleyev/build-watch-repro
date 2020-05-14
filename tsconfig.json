@@ -14,7 +14,13 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "build-watch-repro-lib": [
+        "dist/build-watch-repro-lib/build-watch-repro-lib",
+        "dist/build-watch-repro-lib"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

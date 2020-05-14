@@ -2,5 +2,167 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "build-watch-repro-lib": {
+      "projectType": "library",
+      "root": "projects/build-watch-repro-lib",
+      "sourceRoot": "projects/build-watch-repro-lib/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/build-watch-repro-lib/tsconfig.lib.json",
+            "project": "projects/build-watch-repro-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/build-watch-repro-lib/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/build-watch-repro-lib/src/test.ts",
+            "tsConfig": "projects/build-watch-repro-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/build-watch-repro-lib/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/build-watch-repro-lib/tsconfig.lib.json",
+              "projects/build-watch-repro-lib/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "build-watch-repro-app": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      },
+      "root": "projects/build-watch-repro-app",
+      "sourceRoot": "projects/build-watch-repro-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/build-watch-repro-app",
+            "index": "projects/build-watch-repro-app/src/index.html",
+            "main": "projects/build-watch-repro-app/src/main.ts",
+            "polyfills": "projects/build-watch-repro-app/src/polyfills.ts",
+            "tsConfig": "projects/build-watch-repro-app/tsconfig.app.json",
+            "aot": true,
+            "assets": [
+              "projects/build-watch-repro-app/src/favicon.ico",
+              "projects/build-watch-repro-app/src/assets"
+            ],
+            "styles": [
+              "projects/build-watch-repro-app/src/styles.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/build-watch-repro-app/src/environments/environment.ts",
+                  "with": "projects/build-watch-repro-app/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "build-watch-repro-app:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "build-watch-repro-app:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "build-watch-repro-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/build-watch-repro-app/src/test.ts",
+            "polyfills": "projects/build-watch-repro-app/src/polyfills.ts",
+            "tsConfig": "projects/build-watch-repro-app/tsconfig.spec.json",
+            "karmaConfig": "projects/build-watch-repro-app/karma.conf.js",
+            "assets": [
+              "projects/build-watch-repro-app/src/favicon.ico",
+              "projects/build-watch-repro-app/src/assets"
+            ],
+            "styles": [
+              "projects/build-watch-repro-app/src/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/build-watch-repro-app/tsconfig.app.json",
+              "projects/build-watch-repro-app/tsconfig.spec.json",
+              "projects/build-watch-repro-app/e2e/tsconfig.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/build-watch-repro-app/e2e/protractor.conf.js",
+            "devServerTarget": "build-watch-repro-app:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "build-watch-repro-app:serve:production"
+            }
+          }
+        }
+      }
+    }},
+  "defaultProject": "build-watch-repro-lib"
 }
